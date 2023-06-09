@@ -16,7 +16,6 @@ class PostModel {
 
   async delete(id: number) {
     if (!this.getById(id)) return null
-
     await prisma.post.delete({ where: { id } })
     return this.getAll()
   }
@@ -39,7 +38,6 @@ class PostModel {
 
   async updatePartial(id: number, { title, description }: IUpdatePost) {
     const received_post = await this.getById(id)
-
     const post = await prisma.post.update({
       where: { id },
       data: {

@@ -22,7 +22,6 @@ class PostUseCase {
 
   async create({ title, description }: ICreatePost) {
     if (!title || !description) throw new AppError("Missing required params");
-
     return await postModel.create({ title, description })
   }
 

@@ -24,7 +24,6 @@ class PostController {
 
   async create(req: Request, res: Response) {
     const { title, description } = req.body
-
     const data = await postUseCase.create({ title, description })
     return res.status(201).json(data)
   }
@@ -32,7 +31,6 @@ class PostController {
   async update(req: Request, res: Response) {
     const { id } = req.params
     const { title, description } = req.body
-
     const data = await postUseCase.update(Number(id), { title, description })
     return res.status(200).json(data)
   }
@@ -40,7 +38,6 @@ class PostController {
   async updatePartial(req: Request, res: Response) {
     const { id } = req.params
     const { title, description } = req.body
-
     const data = await postUseCase.updatePartial(Number(id), { title, description })
     return res.status(200).json(data)
   }
