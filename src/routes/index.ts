@@ -1,6 +1,4 @@
 import { Router } from "express";
-
-//CRUD'S
 import postRoutes from "./posts.routes";
 
 const routes = Router()
