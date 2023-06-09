@@ -1,53 +1,39 @@
+import { ICreatePost, IUpdatePost } from "../interfaces/posts"
+import PostModel from "../models/postModel"
+import AppError from "../errors/appError"
 
-let data = [
-  { id: 1, title: "Primeiro", description: "Hello Express" },
-  { id: 2, title: "Segundo", description: "Hello Node!" }
-]
-
-interface ICreatePost {
-   title: string,
-   description: string 
-}
-
-interface IUpdatePost {
-  title?: string,
-  description?: string
-}
+const postModel = new PostModel()
 
 class PostUseCase {
-  getAll() {
-    return data
+  async getAll() {
+    return await postModel.getAll()
   }
 
-  getById(id:number) {
-    const post = data.find(post => post.id === Number(id)) || null
+  async getById(id: number) {
+    const post = await postModel.getById(id)
+    if (!post) throw new AppError("Post not found", 404);
     return post
   }
 
-  delete(id:number) {
-    if (!this.getById(id)) return null
-    data = data.filter(post => post.id !== Number(id))
-    return data
+  async delete(id: number) {
+    if (!this.getById(id)) throw new AppError("Post not found", 404);
+    return await postModel.delete(id)
   }
 
-  create({ title, description }: ICreatePost) {
-  
-    data.push({ id: data.length + 1, title, description })
-    return data
+  async create({ title, description }: ICreatePost) {
+    if (!title || !description) throw new AppError("Missing required params");
+
+    return await postModel.create({ title, description })
   }
 
-  update(id:number, { title, description}:IUpdatePost) {
-    const post_index = data.findIndex(post => post.id === Number(id))
-    data[post_index] = { id: Number(id), title: title || "", description: description || "" }
-    return data[post_index]
+  async update(id: number, { title, description }: IUpdatePost) {
+    if (!this.getById(id)) throw new AppError("Post not found", 404);
+    return await postModel.update(id, { title, description })
   }
 
-  updatePartial(id:number, { title, description}:IUpdatePost) {
-    const post_index = data.findIndex(post => post.id === Number(id))
-
-    data[post_index].title = title || data[post_index].title
-    data[post_index].description = description || data[post_index].description
-    return data[post_index]
+  async updatePartial(id: number, { title, description }: IUpdatePost) {
+    if (!this.getById(id)) throw new AppError("Post not found", 404);
+    return await postModel.updatePartial(id, { title, description })
   }
 }
 

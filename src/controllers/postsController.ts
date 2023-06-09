@@ -5,52 +5,43 @@ const postUseCase = new PostUseCase()
 
 class PostController {
 
-  getAll(_: Request, res: Response) {
-    const data = postUseCase.getAll()
+  async getAll(_: Request, res: Response) {
+    const data = await postUseCase.getAll()
     return res.status(200).json(data)
   }
 
-  getById(req: Request, res: Response) {
+  async getById(req: Request, res: Response) {
     const { id } = req.params
-    const post = postUseCase.getById(Number(id))
-
-    if (!post) {
-      return res.status(404).json({ message: "Post not found" })
-    }
-
+    const post = await postUseCase.getById(Number(id))
     return res.status(200).json(post)
   }
 
-  delete(req: Request, res: Response) {
+  async delete(req: Request, res: Response) {
     const { id } = req.params
-    const data = postUseCase.delete(Number(id))
+    const data = await postUseCase.delete(Number(id))
     return res.status(200).json(data)
   }
 
-  create(req: Request, res: Response) {
+  async create(req: Request, res: Response) {
     const { title, description } = req.body
 
-    if (!title || !description) {
-      return res.status(400).json({ message: "Missing required params" })
-    }
-
-    const data = postUseCase.create({ title, description })
+    const data = await postUseCase.create({ title, description })
     return res.status(201).json(data)
   }
 
-  update(req: Request, res: Response) {
+  async update(req: Request, res: Response) {
     const { id } = req.params
     const { title, description } = req.body
 
-    const data = postUseCase.update(Number(id), { title, description })
+    const data = await postUseCase.update(Number(id), { title, description })
     return res.status(200).json(data)
   }
 
-  updatePartial(req: Request, res: Response) {
+  async updatePartial(req: Request, res: Response) {
     const { id } = req.params
     const { title, description } = req.body
 
-    const data = postUseCase.updatePartial(Number(id), { title, description })
+    const data = await postUseCase.updatePartial(Number(id), { title, description })
     return res.status(200).json(data)
   }
 }
